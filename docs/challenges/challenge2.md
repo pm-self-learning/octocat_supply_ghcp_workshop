@@ -1,4 +1,4 @@
-## Use Case 3: "Enforce team standards and make Copilot understand them. Also, delegate tasks to a custom Agent"
+## Challenge 2: "Enforce team standards and make Copilot understand them. Also, delegate tasks to a custom Agent"
 
 ### **Scenario 1:**  Your company uses an internal observability framework (TAO). New developers keep forgetting to add proper logging/metrics.  Beyond that, they continue to miss compliance requirements which delay releases.
 
