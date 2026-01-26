@@ -102,9 +102,8 @@ This project is designed to showcase GitHub Copilot's capabilities. As such, it 
 
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Details | Copilot Features |
 |-------|---------|------------------|
-| [Week 1](/docs/challenges/week1.md) | GitHub Copilot overview | Introduction to GitHub Copilot, and Prompt Engineering |
-| [Week 2](/docs/challenges/week2.md) | Use Copilot to build a new feature and improve test coverage | Plan mode, Agent mode, Vision, Prompt Files |
-| [Week 3](/docs/challenges/week3.md) | Enforce team standards and delegate tasks to the custom Agent | Custom Instructions, Custom Agent  |
+| [Challenge 1](/docs/challenges/challenge1.md) | Use Copilot to build a new feature and improve test coverage | Plan mode, Agent mode, Vision, Prompt Files |
+| [Challenge 2](/docs/challenges/challenge2.md) | Enforce team standards and delegate tasks to the custom Agent | Custom Instructions, Custom Agent  |
 ---
 
 
