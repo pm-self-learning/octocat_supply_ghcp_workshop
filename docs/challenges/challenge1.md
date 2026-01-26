@@ -1,4 +1,4 @@
-## Week 2: Use Copilot to build a new feature and improve test coverage
+## Challenge 1: Use Copilot to build a new feature and improve test coverage
 
 ### Pre-requisite:
 Use the [repo template](https://github.com/new?template_name=octocat_supply_ghcp_workshop&template_owner=pm-self-learning) to create a new repo in your personal GitHub Account and either work on it locally or in a Codespace.
