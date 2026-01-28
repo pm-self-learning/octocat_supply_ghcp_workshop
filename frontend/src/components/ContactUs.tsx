@@ -37,7 +37,7 @@ export default function ContactUs() {
     // Validate email
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
 
@@ -58,7 +58,7 @@ export default function ContactUs() {
 
     if (validateForm()) {
       // Form is valid, show success message and clear form
-      setSuccessMessage('Thank you for contacting us! We will get back to you soon.');
+      setSuccessMessage('Thank you for contacting us!');
       setFormData({
         name: '',
         email: '',
@@ -84,6 +84,10 @@ export default function ContactUs() {
         [name]: undefined,
       }));
     }
+    // Clear success message when user starts modifying the form
+    if (successMessage) {
+      setSuccessMessage('');
+    }
   };
 
   return (
@@ -108,7 +112,7 @@ export default function ContactUs() {
           <div
             className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md"
             role="alert"
-            aria-live="polite"
+            aria-live="assertive"
           >
             {successMessage}
           </div>
