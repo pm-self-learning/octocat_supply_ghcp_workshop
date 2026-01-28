@@ -1,5 +1,5 @@
-import { useCart } from '../../context/CartContext';
-import { useTheme } from '../../context/ThemeContext';
+import { useCart } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Cart() {
   const { cart, isLoading, removeItem, updateQuantity, clearCart } = useCart();
