@@ -35,6 +35,8 @@ export default function ContactUs() {
     }
 
     // Validate email
+    // Using a practical email validation pattern that covers most common cases.
+    // For stricter RFC 5322 compliance, consider using a dedicated validation library.
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
@@ -110,7 +112,7 @@ export default function ContactUs() {
 
         {successMessage && (
           <div
-            className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md"
+            className={`mb-6 p-4 rounded-md ${darkMode ? 'bg-green-900/30 border border-green-500 text-green-300' : 'bg-green-100 border border-green-400 text-green-700'}`}
             role="alert"
             aria-live="assertive"
           >
