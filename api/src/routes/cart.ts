@@ -209,6 +209,13 @@ const router = express.Router();
 // Create a new cart
 router.post('/', async (req, res, next) => {
   try {
+    // Validate required fields
+    const { createdDate, updatedDate, status } = req.body;
+    if (!createdDate || !updatedDate || !status) {
+      res.status(400).json({ error: 'Missing required fields: createdDate, updatedDate, and status are required' });
+      return;
+    }
+
     const repo = await getCartsRepository();
     const newCart = await repo.create(req.body as Omit<Cart, 'cartId'>);
     res.status(201).json(newCart);
@@ -294,6 +301,19 @@ router.get('/:id/items', async (req, res, next) => {
 // Add an item to a cart
 router.post('/:id/items', async (req, res, next) => {
   try {
+    // Validate required fields
+    const { productId, quantity, unitPrice } = req.body;
+    if (!productId || !quantity || !unitPrice) {
+      res.status(400).json({ error: 'Missing required fields: productId, quantity, and unitPrice are required' });
+      return;
+    }
+
+    // Validate positive quantity
+    if (quantity <= 0) {
+      res.status(400).json({ error: 'Quantity must be greater than 0' });
+      return;
+    }
+
     const cartRepo = await getCartsRepository();
     const cart = await cartRepo.findById(parseInt(req.params.id));
     if (!cart) {

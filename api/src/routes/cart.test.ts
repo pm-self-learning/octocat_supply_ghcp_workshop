@@ -228,4 +228,52 @@ describe('Cart API', () => {
     const response = await request(app).post('/carts/999/items').send(cartItem);
     expect(response.status).toBe(404);
   });
+
+  it('should return 400 when creating cart without required fields', async () => {
+    const invalidCart = {
+      branchId: 1,
+    };
+    const response = await request(app).post('/carts').send(invalidCart);
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 400 when adding item with invalid quantity', async () => {
+    // First create a cart
+    const newCart = {
+      branchId: 1,
+      createdDate: '2024-01-01T00:00:00Z',
+      updatedDate: '2024-01-01T00:00:00Z',
+      status: 'active',
+    };
+    const createResponse = await request(app).post('/carts').send(newCart);
+    const cartId = createResponse.body.cartId;
+
+    // Try to add item with zero quantity
+    const invalidItem = {
+      productId: 1,
+      quantity: 0,
+      unitPrice: 10.0,
+    };
+    const response = await request(app).post(`/carts/${cartId}/items`).send(invalidItem);
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 400 when adding item without required fields', async () => {
+    // First create a cart
+    const newCart = {
+      branchId: 1,
+      createdDate: '2024-01-01T00:00:00Z',
+      updatedDate: '2024-01-01T00:00:00Z',
+      status: 'active',
+    };
+    const createResponse = await request(app).post('/carts').send(newCart);
+    const cartId = createResponse.body.cartId;
+
+    // Try to add item without required fields
+    const invalidItem = {
+      quantity: 2,
+    };
+    const response = await request(app).post(`/carts/${cartId}/items`).send(invalidItem);
+    expect(response.status).toBe(400);
+  });
 });
