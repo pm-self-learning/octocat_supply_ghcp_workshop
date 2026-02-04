@@ -309,6 +309,7 @@ router.post('/:id/items', async (req, res, next) => {
     }
 
     // Validate positive quantity
+    // This mirrors the database CHECK constraint (quantity > 0) to provide immediate feedback
     if (quantity <= 0) {
       res.status(400).json({ error: 'Quantity must be greater than 0' });
       return;

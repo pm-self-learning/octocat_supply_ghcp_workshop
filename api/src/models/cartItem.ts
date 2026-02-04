@@ -5,24 +5,22 @@
  *     CartItem:
  *       type: object
  *       required:
- *         - cartItemId
- *         - cartId
  *         - productId
  *         - quantity
  *         - unitPrice
  *       properties:
  *         cartItemId:
  *           type: integer
- *           description: The unique identifier for the cart item
+ *           description: The unique identifier for the cart item (auto-generated)
  *         cartId:
  *           type: integer
- *           description: The ID of the parent cart
+ *           description: The ID of the parent cart (set automatically when adding to cart)
  *         productId:
  *           type: integer
  *           description: The ID of the product in the cart
  *         quantity:
  *           type: integer
- *           description: The quantity of products in the cart
+ *           description: The quantity of products in the cart (must be greater than 0)
  *         unitPrice:
  *           type: number
  *           format: float

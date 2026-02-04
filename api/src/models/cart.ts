@@ -5,13 +5,12 @@
  *     Cart:
  *       type: object
  *       required:
- *         - cartId
  *         - createdDate
  *         - updatedDate
  *       properties:
  *         cartId:
  *           type: integer
- *           description: The unique identifier for the cart
+ *           description: The unique identifier for the cart (auto-generated)
  *         branchId:
  *           type: integer
  *           description: The ID of the branch that owns this cart
@@ -27,6 +26,7 @@
  *           type: string
  *           description: The current status of the cart
  *           enum: [active, completed, abandoned]
+ *           default: active
  */
 export interface Cart {
   cartId: number;
