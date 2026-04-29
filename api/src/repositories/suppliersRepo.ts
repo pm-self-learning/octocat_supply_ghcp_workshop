@@ -130,7 +130,25 @@ export class SuppliersRepository {
         'SELECT * FROM suppliers WHERE name LIKE ? ORDER BY name',
         [`%${name}%`],
       );
-      return mapDatabaseRows<Supplier>(rows);
+      return mapDatabaseRows<Supplier>(rows).map(this.convertBooleanFields);
+    } catch (error) {
+      handleDatabaseError(error);
+    }
+  }
+
+  /**
+   * Search suppliers by name, email, or contact person (partial match)
+   */
+  async search(query: string): Promise<Supplier[]> {
+    try {
+      const pattern = `%${query}%`;
+      const rows = await this.db.all<DatabaseRow>(
+        `SELECT * FROM suppliers
+         WHERE name LIKE ? OR email LIKE ? OR contact_person LIKE ?
+         ORDER BY name`,
+        [pattern, pattern, pattern],
+      );
+      return mapDatabaseRows<Supplier>(rows).map(this.convertBooleanFields);
     } catch (error) {
       handleDatabaseError(error);
     }

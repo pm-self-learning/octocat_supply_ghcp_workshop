@@ -37,6 +37,29 @@
  *             schema:
  *               $ref: '#/components/schemas/Supplier'
  *
+ * /api/suppliers/search:
+ *   get:
+ *     summary: Search suppliers by name, email, or contact person
+ *     tags: [Suppliers]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search term to match against name, email, or contact person
+ *     responses:
+ *       200:
+ *         description: List of matching suppliers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Supplier'
+ *       400:
+ *         description: Missing search query parameter
+ *
  * /api/suppliers/{id}:
  *   get:
  *     summary: Get a supplier by ID
@@ -147,6 +170,22 @@ router.get('/', async (req, res, next) => {
   try {
     const repo = await getSuppliersRepository();
     const suppliers = await repo.findAll();
+    res.json(suppliers);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Search suppliers by name, email, or contact person
+router.get('/search', async (req, res, next) => {
+  try {
+    const q = req.query.q as string | undefined;
+    if (!q || q.trim() === '') {
+      res.status(400).json({ error: 'Missing required query parameter: q' });
+      return;
+    }
+    const repo = await getSuppliersRepository();
+    const suppliers = await repo.search(q.trim());
     res.json(suppliers);
   } catch (error) {
     next(error);
