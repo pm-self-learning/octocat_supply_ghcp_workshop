@@ -150,7 +150,7 @@
 import express from 'express';
 import { Supplier } from '../models/supplier';
 import { getSuppliersRepository } from '../repositories/suppliersRepo';
-import { handleDatabaseError, NotFoundError } from '../utils/errors';
+import { handleDatabaseError, NotFoundError, ValidationError } from '../utils/errors';
 
 const router = express.Router();
 
@@ -181,8 +181,7 @@ router.get('/search', async (req, res, next) => {
   try {
     const q = req.query.q as string | undefined;
     if (!q || q.trim() === '') {
-      res.status(400).json({ error: 'Missing required query parameter: q' });
-      return;
+      throw new ValidationError('Missing required query parameter: q');
     }
     const repo = await getSuppliersRepository();
     const suppliers = await repo.search(q.trim());

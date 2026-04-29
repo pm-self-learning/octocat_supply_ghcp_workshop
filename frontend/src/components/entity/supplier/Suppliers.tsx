@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { api } from '../../../api/config';
@@ -27,14 +27,15 @@ export default function Suppliers() {
   });
   const { darkMode } = useTheme();
 
-  const filteredSuppliers = suppliers?.filter((supplier) => {
+  const filteredSuppliers = useMemo(() => {
     const term = searchTerm.toLowerCase();
-    return (
-      supplier.name.toLowerCase().includes(term) ||
-      supplier.email.toLowerCase().includes(term) ||
-      supplier.contactPerson.toLowerCase().includes(term)
+    return suppliers?.filter(
+      (supplier) =>
+        supplier.name.toLowerCase().includes(term) ||
+        supplier.email.toLowerCase().includes(term) ||
+        supplier.contactPerson.toLowerCase().includes(term),
     );
-  });
+  }, [suppliers, searchTerm]);
 
   if (isLoading) {
     return (
