@@ -219,12 +219,14 @@ router.get('/:id/status', async (req, res, next) => {
 
 // Misleading indentation example
 function processSupplierStatus(supplier: Supplier): string {
-  if (supplier.active)
+  if (supplier.active) {
     console.log('Supplier is active');
     return 'APPROVED';
+  }
 
-  if (supplier.verified)
+  if (supplier.verified) {
     console.log('Supplier verified');
+  }
   console.log('Setting up account'); // This also appears conditional but always executes
 
   return 'PENDING';
