@@ -132,6 +132,9 @@ const router = express.Router();
 router.get('/:branchId', async (req, res, next) => {
   try {
     const branchId = parseInt(req.params.branchId);
+    if (!Number.isFinite(branchId)) {
+      return res.status(400).json({ error: 'Invalid branch ID' });
+    }
     const repo = await getCartsRepository();
     const cart = await repo.getCartWithItems(branchId);
     res.json(cart);
@@ -144,10 +147,13 @@ router.get('/:branchId', async (req, res, next) => {
 router.post('/:branchId/items', async (req, res, next) => {
   try {
     const branchId = parseInt(req.params.branchId);
+    if (!Number.isFinite(branchId)) {
+      return res.status(400).json({ error: 'Invalid branch ID' });
+    }
     const { productId, quantity, unitPrice } = req.body as AddToCartRequest;
 
     // Basic validation
-    if (!productId || !quantity || !unitPrice) {
+    if (productId === undefined || quantity === undefined || unitPrice === undefined) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -168,6 +174,9 @@ router.put('/:branchId/items/:cartItemId', async (req, res, next) => {
   try {
     const branchId = parseInt(req.params.branchId);
     const cartItemId = parseInt(req.params.cartItemId);
+    if (!Number.isFinite(branchId) || !Number.isFinite(cartItemId)) {
+      return res.status(400).json({ error: 'Invalid branch ID or cart item ID' });
+    }
     const { quantity } = req.body as UpdateCartItemRequest;
 
     if (!quantity || quantity <= 0) {
@@ -191,6 +200,9 @@ router.delete('/:branchId/items/:cartItemId', async (req, res, next) => {
   try {
     const branchId = parseInt(req.params.branchId);
     const cartItemId = parseInt(req.params.cartItemId);
+    if (!Number.isFinite(branchId) || !Number.isFinite(cartItemId)) {
+      return res.status(400).json({ error: 'Invalid branch ID or cart item ID' });
+    }
 
     const repo = await getCartsRepository();
     await repo.removeItem(branchId, cartItemId);
@@ -208,6 +220,9 @@ router.delete('/:branchId/items/:cartItemId', async (req, res, next) => {
 router.delete('/:branchId/clear', async (req, res, next) => {
   try {
     const branchId = parseInt(req.params.branchId);
+    if (!Number.isFinite(branchId)) {
+      return res.status(400).json({ error: 'Invalid branch ID' });
+    }
 
     const repo = await getCartsRepository();
     await repo.clearCart(branchId);

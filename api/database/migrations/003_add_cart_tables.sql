@@ -4,7 +4,7 @@
 -- Create carts table
 CREATE TABLE carts (
     cart_id INTEGER PRIMARY KEY,
-    branch_id INTEGER NOT NULL,
+    branch_id INTEGER NOT NULL UNIQUE,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (branch_id) REFERENCES branches(branch_id) ON DELETE CASCADE

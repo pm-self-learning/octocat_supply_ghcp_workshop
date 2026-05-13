@@ -21,7 +21,7 @@ export class CartsRepository {
     try {
       // Try to find existing cart for branch
       const row = await this.db.get<DatabaseRow>(
-        'SELECT * FROM carts WHERE branch_id = ? ORDER BY created_at DESC LIMIT 1',
+        'SELECT * FROM carts WHERE branch_id = ?',
         [branchId],
       );
 
@@ -29,12 +29,15 @@ export class CartsRepository {
         return objectToCamelCase<Cart>(row);
       }
 
-      // Create new cart if none exists
-      const { sql, values } = buildInsertSQL('carts', { branchId });
-      const result = await this.db.run(sql, values);
+      // Create new cart if none exists using INSERT OR IGNORE to handle race conditions
+      await this.db.run(
+        'INSERT OR IGNORE INTO carts (branch_id, created_at, updated_at) VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
+        [branchId],
+      );
 
-      const newCart = await this.db.get<DatabaseRow>('SELECT * FROM carts WHERE cart_id = ?', [
-        result.lastID,
+      // Fetch the cart (either just created or created by concurrent request)
+      const newCart = await this.db.get<DatabaseRow>('SELECT * FROM carts WHERE branch_id = ?', [
+        branchId,
       ]);
 
       if (!newCart) {
@@ -116,12 +119,12 @@ export class CartsRepository {
       );
 
       if (existingItem) {
-        // Update quantity of existing item
+        // Update quantity of existing item, keeping the original unit_price
         const existingItemTyped = objectToCamelCase<CartItem>(existingItem);
         const newQuantity = existingItemTyped.quantity + quantity;
         await this.db.run(
-          'UPDATE cart_items SET quantity = ?, unit_price = ? WHERE cart_item_id = ?',
-          [newQuantity, unitPrice, existingItemTyped.cartItemId],
+          'UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?',
+          [newQuantity, existingItemTyped.cartItemId],
         );
 
         const updatedItem = await this.db.get<DatabaseRow>(
@@ -270,6 +273,11 @@ export async function createCartsRepository(isTest: boolean = false): Promise<Ca
 let cartsRepo: CartsRepository | null = null;
 
 export async function getCartsRepository(isTest: boolean = false): Promise<CartsRepository> {
+  const isTestEnv = isTest || process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+  if (isTestEnv) {
+    // In tests, always return a fresh repository bound to the current in-memory DB
+    return createCartsRepository(true);
+  }
   if (!cartsRepo) {
     cartsRepo = await createCartsRepository(isTest);
   }

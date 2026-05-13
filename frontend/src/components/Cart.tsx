@@ -2,7 +2,7 @@ import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Cart() {
-  const { cart, isLoading, removeItem, updateQuantity, clearCart } = useCart();
+  const { cart, isLoading, error, removeItem, updateQuantity, clearCart } = useCart();
   const { darkMode } = useTheme();
 
   const handleQuantityChange = async (cartItemId: number, currentQuantity: number, delta: number) => {
@@ -32,6 +32,49 @@ export default function Cart() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className={`min-h-screen ${darkMode ? 'bg-dark' : 'bg-gray-100'} pt-20 px-4 transition-colors duration-300`}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div
+            className={`flex flex-col items-center justify-center text-center py-20 rounded-lg ${
+              darkMode ? 'bg-gray-800' : 'bg-white'
+            } shadow-sm border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-16 w-16 mb-4 ${darkMode ? 'text-red-400' : 'text-red-500'}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className={`${darkMode ? 'text-light' : 'text-gray-800'} text-xl font-medium mb-2`}>
+              Failed to load cart
+            </p>
+            <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-4`}>
+              There was an error loading your shopping cart. Please try again.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary hover:bg-accent text-white rounded-lg transition-colors"
+            >
+              Retry
+            </button>
           </div>
         </div>
       </div>

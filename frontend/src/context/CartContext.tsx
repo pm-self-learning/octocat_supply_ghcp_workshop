@@ -41,7 +41,7 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null);
 
 const fetchCart = async (): Promise<Cart> => {
-  const { data } = await axios.get(`${api.baseURL}/api/cart/${BRANCH_ID}`);
+  const { data } = await axios.get(`${api.baseURL}${api.endpoints.cart}/${BRANCH_ID}`);
   return data;
 };
 
@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCartMutation = useMutation(
     async ({ productId, quantity, unitPrice }: { productId: number; quantity: number; unitPrice: number }) => {
-      await axios.post(`${api.baseURL}/api/cart/${BRANCH_ID}/items`, {
+      await axios.post(`${api.baseURL}${api.endpoints.cart}/${BRANCH_ID}/items`, {
         productId,
         quantity,
         unitPrice,
@@ -70,7 +70,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const updateQuantityMutation = useMutation(
     async ({ cartItemId, quantity }: { cartItemId: number; quantity: number }) => {
-      await axios.put(`${api.baseURL}/api/cart/${BRANCH_ID}/items/${cartItemId}`, {
+      await axios.put(`${api.baseURL}${api.endpoints.cart}/${BRANCH_ID}/items/${cartItemId}`, {
         quantity,
       });
     },
@@ -83,7 +83,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const removeItemMutation = useMutation(
     async (cartItemId: number) => {
-      await axios.delete(`${api.baseURL}/api/cart/${BRANCH_ID}/items/${cartItemId}`);
+      await axios.delete(`${api.baseURL}${api.endpoints.cart}/${BRANCH_ID}/items/${cartItemId}`);
     },
     {
       onSuccess: () => {
@@ -94,7 +94,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCartMutation = useMutation(
     async () => {
-      await axios.delete(`${api.baseURL}/api/cart/${BRANCH_ID}/clear`);
+      await axios.delete(`${api.baseURL}${api.endpoints.cart}/${BRANCH_ID}/clear`);
     },
     {
       onSuccess: () => {
