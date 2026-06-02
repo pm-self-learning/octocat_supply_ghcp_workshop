@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const Footer: React.FC = () => {
@@ -62,9 +63,9 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
-                  Supports
-                </a>
+                <Link to="/contact" className="hover:text-primary">
+                  Contact Us
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-primary">
