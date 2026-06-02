@@ -104,7 +104,6 @@ export default function Contact() {
                 <label className="flex flex-col gap-2 text-sm font-medium">
                   Name
                   <input
-                    aria-label="Name"
                     className={`${darkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 focus:border-primary focus:outline-none`}
                     type="text"
                     value={formData.name}
@@ -115,7 +114,6 @@ export default function Contact() {
                 <label className="flex flex-col gap-2 text-sm font-medium">
                   Email
                   <input
-                    aria-label="Email"
                     className={`${darkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 focus:border-primary focus:outline-none`}
                     type="email"
                     value={formData.email}
@@ -129,7 +127,6 @@ export default function Contact() {
                 <label className="flex flex-col gap-2 text-sm font-medium">
                   Company
                   <input
-                    aria-label="Company"
                     className={`${darkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 focus:border-primary focus:outline-none`}
                     type="text"
                     value={formData.company}
@@ -139,7 +136,6 @@ export default function Contact() {
                 <label className="flex flex-col gap-2 text-sm font-medium">
                   Subject
                   <input
-                    aria-label="Subject"
                     className={`${darkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 focus:border-primary focus:outline-none`}
                     type="text"
                     value={formData.subject}
@@ -152,7 +148,6 @@ export default function Contact() {
               <label className="flex flex-col gap-2 text-sm font-medium">
                 Message
                 <textarea
-                  aria-label="Message"
                   className={`${darkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} min-h-36 rounded-md border px-3 py-2 focus:border-primary focus:outline-none`}
                   value={formData.message}
                   onChange={(event) => handleChange('message', event.target.value)}
