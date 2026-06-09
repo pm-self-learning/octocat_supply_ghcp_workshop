@@ -1,0 +1,89 @@
+name: Daily Issues Report
+
+on:
+  schedule:
+    - cron: '0 9 * * 1-5'  # 09:00 UTC, Monday–Friday
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  daily-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate daily issues report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+            const since = new Date(now - 24 * 60 * 60 * 1000).toISOString();
+            const staleThreshold = new Date(now - 14 * 24 * 60 * 60 * 1000).toISOString();
+
+            // New issues opened in the last 24 hours
+            const newIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              since,
+              per_page: 100,
+            });
+
+            // Issues closed in the last 24 hours
+            const closedIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed',
+              since,
+              per_page: 100,
+            });
+
+            // Stale open issues (no update in 14+ days)
+            const allOpenIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const staleIssues = allOpenIssues.filter(
+              i => new Date(i.updated_at) < new Date(staleThreshold) && !i.pull_request
+            );
+            const freshNew = newIssues.filter(i => !i.pull_request);
+            const freshClosed = closedIssues.filter(i => !i.pull_request);
+
+            const fmtIssue = i => `- [#${i.number}](${i.html_url}) ${i.title}`;
+
+            const newSection = freshNew.length
+              ? freshNew.map(fmtIssue).join('\n')
+              : '_No new issues in the last 24 hours._';
+
+            const closedSection = freshClosed.length
+              ? freshClosed.map(fmtIssue).join('\n')
+              : '_No issues closed in the last 24 hours._';
+
+            const staleSection = staleIssues.length
+              ? staleIssues.map(fmtIssue).join('\n')
+              : '_No stale issues._';
+
+            const dateStr = now.toISOString().split('T')[0];
+            const body = [
+              `## Daily Issues Report – ${dateStr}`,
+              '',
+              '### 🆕 New Issues (last 24 h)',
+              newSection,
+              '',
+              '### ✅ Closed / Resolved (last 24 h)',
+              closedSection,
+              '',
+              '### ⏳ Stale Issues (no activity in 14+ days)',
+              staleSection,
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[daily-report] Issues summary for ${dateStr}`,
+              body,
+              labels: ['report'],
+            });
