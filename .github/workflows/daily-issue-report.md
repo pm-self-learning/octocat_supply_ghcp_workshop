@@ -6,6 +6,7 @@ on:
 permissions:
   contents: read
   issues: read
+  models: read
 safe-outputs:
   create-issue:
     title-prefix: "[daily-report] "
